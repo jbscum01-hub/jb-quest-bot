@@ -3,7 +3,7 @@ const {
   PermissionFlagsBits,
   EmbedBuilder,
 } = require('discord.js');
-const { CONFIG, getProfessionByKey } = require('../config');
+const { CONFIG } = require('../config');
 const { buildTicketChannelName } = require('../utils/channelName');
 const { safeReply } = require('../utils/safeReply');
 const {
@@ -11,11 +11,17 @@ const {
   findLatestRunByUserAndProfession,
   logQuestAction,
 } = require('./questRunService');
+const { getProfessionByKeyFromDb } = require('./professionService');
 
 async function startSoloHunt(interaction, professionKey) {
-  const profession = getProfessionByKey(professionKey);
+  const profession = await getProfessionByKeyFromDb(professionKey);
   if (!profession || !profession.enabled) {
     await safeReply(interaction, 'ไม่พบสายอาชีพนี้ หรือสายนี้ยังไม่เปิดใช้งาน');
+    return;
+  }
+
+  if (profession.panelChannelId && interaction.channelId !== profession.panelChannelId) {
+    await safeReply(interaction, `กรุณาเริ่มเควสจากห้อง panel ของสายนี้ <#${profession.panelChannelId}>`);
     return;
   }
 
@@ -106,6 +112,7 @@ async function startSoloHunt(interaction, professionKey) {
   });
 
   const embed = new EmbedBuilder()
+    .setColor(profession.color || 0x00aeff)
     .setTitle('Treasure Hunt Started')
     .setDescription([
       `สาย: ${profession.displayName}`,

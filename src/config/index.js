@@ -7,7 +7,7 @@ function readEnv(name, fallback = '') {
 const CONFIG = {
   app: {
     name: 'Treasure Hunt Bot',
-    version: '1.2.0',
+    version: '1.3.0',
     env: readEnv('NODE_ENV', 'development'),
   },
 
@@ -19,6 +19,7 @@ const CONFIG = {
     channels: {
       ticketCategoryId: readEnv('TICKET_CATEGORY_ID'),
       logChannelId: readEnv('LOG_CHANNEL_ID'),
+      adminControlChannelId: readEnv('ADMIN_CONTROL_CHANNEL_ID'),
     },
 
     roles: {
@@ -61,6 +62,15 @@ const CONFIG = {
     unlockInOrderOnly: true,
   },
 
+  ui: {
+    adminControlCustomId: 'admin_panel_control',
+    adminCreateAllPanels: 'admin_create_all_panels',
+    adminRefreshAllPanels: 'admin_refresh_all_panels',
+    adminCheckPanelStatus: 'admin_check_panel_status',
+    professionStartPrefix: 'start_profession_',
+    adminCreatePanelPrefix: 'admin_create_panel_',
+  },
+
   professions: {
     medic: {
       key: 'medic',
@@ -68,11 +78,12 @@ const CONFIG = {
       emoji: '🩺',
       displayName: '🩺 lv5-ผู้กอบกู้ชีวิต',
       ticketChannelPrefix: 'ticket-medic',
-      roleId: '1464539552029868145',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0x5bc0eb,
     },
     farmer: {
       key: 'farmer',
@@ -80,11 +91,12 @@ const CONFIG = {
       emoji: '🌾',
       displayName: '🌾 lv5-ตำนานเกษตรกร',
       ticketChannelPrefix: 'ticket-farmer',
-      roleId: '1464540044239831080',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0x8bc34a,
     },
     soldier: {
       key: 'soldier',
@@ -92,11 +104,12 @@ const CONFIG = {
       emoji: '🪖',
       displayName: '🪖 lv5-ผู้บัญชาการสนามรบ',
       ticketChannelPrefix: 'ticket-soldier',
-      roleId: '1464597732902699028',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0x4f6d3a,
     },
     fisher: {
       key: 'fisher',
@@ -104,11 +117,12 @@ const CONFIG = {
       emoji: '🎣',
       displayName: '🎣 lv5-ตำนานนักตกปลา',
       ticketChannelPrefix: 'ticket-fisher',
-      roleId: '1464541435784200391',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0x3f88c5,
     },
     hunter: {
       key: 'hunter',
@@ -116,11 +130,12 @@ const CONFIG = {
       emoji: '🦌',
       displayName: '🦌 lv5-ตำนานนักล่า',
       ticketChannelPrefix: 'ticket-hunter',
-      roleId: '1464541588163399774',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0x9c6644,
     },
     explorer: {
       key: 'explorer',
@@ -128,11 +143,12 @@ const CONFIG = {
       emoji: '🧭',
       displayName: '🧭 lv5-ผู้พิชิตแผนที่',
       ticketChannelPrefix: 'ticket-explorer',
-      roleId: '1464541202522312704',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0xf4a261,
     },
     chef: {
       key: 'chef',
@@ -140,11 +156,12 @@ const CONFIG = {
       emoji: '👨‍🍳',
       displayName: '👨‍🍳 lv5-ตำนานเชฟผู้รอดชีวิต',
       ticketChannelPrefix: 'ticket-chef',
-      roleId: '1464541767297794195',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0xe9c46a,
     },
     engineer: {
       key: 'engineer',
@@ -152,23 +169,25 @@ const CONFIG = {
       emoji: '🔧',
       displayName: '🔧 lv5-วิศวกรเอาตัวรอด',
       ticketChannelPrefix: 'ticket-engineer',
-      roleId: '1480143757289590814',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0x6d597a,
     },
-    scavenger: {
+    pilot: {
       key: 'pilot',
       name: 'สายนักบิน',
-      emoji: '🛩️',
-      displayName: '🛩️ lv5-นักบินในตำนาน',
-      ticketChannelPrefix: 'ticket-scavenger',
-      roleId: '1480145093208965211',
+      emoji: '✈️',
+      displayName: '✈️ lv5-นักบินผู้ไม่หลงทาง',
+      ticketChannelPrefix: 'ticket-pilot',
+      roleId: 'PUT_ROLE_ID_HERE',
       enabled: true,
       allowSolo: true,
       minTeamSize: 1,
       maxTeamSize: 1,
+      color: 0xe76f51,
     },
   },
 };

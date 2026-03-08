@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { CONFIG, getEnabledProfessions } = require('../config');
+const { CONFIG } = require('../config');
+const { getEnabledProfessionsFromDb } = require('../services/professionService');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -7,12 +8,13 @@ module.exports = {
     .setDescription('ดูรายชื่อสาย Treasure Hunt ที่เปิดใช้งาน'),
 
   async execute(interaction) {
-    const professions = getEnabledProfessions();
+    const professions = await getEnabledProfessionsFromDb();
 
     const lines = professions.map((profession, index) => {
       return [
         `${index + 1}. ${profession.displayName}`,
         `key: \`${profession.key}\``,
+        profession.panelChannelId ? `panel: <#${profession.panelChannelId}>` : 'panel: `ยังไม่ตั้ง`',
         'โหมด: เล่นเดี่ยว',
       ].join(' • ');
     });
