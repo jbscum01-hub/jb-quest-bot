@@ -3,23 +3,26 @@ const { getProfessionByKey: getProfessionFromConfig, getEnabledProfessions: getE
 
 function mergeProfession(row) {
   if (!row) return null;
-  const config = getProfessionFromConfig(row.profession_key || row.key) || {};
+  const key = row.profession_key || row.key;
+  const config = getProfessionFromConfig(key) || {};
 
   return {
-    key: row.profession_key || row.key,
-    professionKey: row.profession_key || row.key,
-    name: row.name || config.name || row.profession_key,
-    displayName: row.display_name || config.displayName || row.name || row.profession_key,
+    key,
+    professionKey: key,
+    name: row.name || config.name || key,
+    displayName: row.display_name || config.displayName || row.name || key,
     emoji: row.emoji || config.emoji || '🎯',
-    ticketChannelPrefix: row.ticket_channel_prefix || config.ticketChannelPrefix || `ticket-${row.profession_key || row.key}`,
+    ticketChannelPrefix: row.ticket_channel_prefix || config.ticketChannelPrefix || `ticket-${key}`,
     roleId: row.role_id || config.roleId || '',
-    enabled: typeof row.enabled === 'boolean' ? row.enabled : (config.enabled ?? true),
     panelChannelId: row.panel_channel_id || null,
     panelMessageId: row.panel_message_id || null,
+    submissionChannelId: row.submission_channel_id || null,
+    missionTitle: row.mission_title || `สมบัติแห่ง${row.name || config.name || key}`,
+    levelText: row.level_text || 'Lv.4 → Lv.5',
+    difficultyStars: row.difficulty_stars || '⭐⭐⭐',
+    rewardText: row.reward_text || (row.display_name || config.displayName || row.name || key),
+    enabled: typeof row.enabled === 'boolean' ? row.enabled : (config.enabled ?? true),
     color: config.color || 0x00aeff,
-    allowSolo: true,
-    minTeamSize: 1,
-    maxTeamSize: 1,
   };
 }
 
@@ -61,7 +64,8 @@ async function updatePanelMapping(professionKey, channelId, messageId) {
   const sql = `
     update professions
     set panel_channel_id = $1,
-        panel_message_id = $2
+        panel_message_id = $2,
+        updated_at = now()
     where profession_key = $3
     returning *
   `;
