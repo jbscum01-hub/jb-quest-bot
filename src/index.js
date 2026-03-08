@@ -2,6 +2,8 @@ const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js'
 const { CONFIG, getRequiredEnvWarnings } = require('./config');
 const { registerEvents } = require('./handlers/registerEvents');
 const { registerCommands } = require('./handlers/registerCommands');
+const { registerSlashCommands } = require('./utils/registerSlashCommands');
+const { setupAdminControlPanel } = require('./utils/setupAdminControlPanel');
 const { query, pool } = require('./db/pool');
 
 const missingEnv = getRequiredEnvWarnings();
@@ -29,6 +31,18 @@ client.once('ready', async () => {
     console.log('✅ Connected to Neon PostgreSQL');
   } catch (error) {
     console.error('❌ Failed to connect to Neon PostgreSQL:', error.message);
+  }
+
+  try {
+    await registerSlashCommands();
+  } catch (error) {
+    console.error('❌ Failed to auto-register slash commands:', error.message);
+  }
+
+  try {
+    await setupAdminControlPanel(client);
+  } catch (error) {
+    console.error('❌ Failed to auto-create admin control panel:', error.message);
   }
 
   console.log(`✅ ${CONFIG.app.name} v${CONFIG.app.version} logged in as ${client.user.tag}`);
