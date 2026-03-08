@@ -1,54 +1,59 @@
-# Treasure Hunt Bot
+# Treasure Hunt Bot (Neon + Solo Mode)
 
-Discord bot โครงเริ่มต้นสำหรับระบบ Treasure Hunt ใน SCUM
+Discord bot สำหรับระบบ Treasure Hunt ใน SCUM โดยเวอร์ชันนี้ปรับเป็น **เล่นเดี่ยวเท่านั้น** และเก็บข้อมูลใน **Neon PostgreSQL**
 
-## จุดเด่นของเวอร์ชันนี้
-- รวม config/variables ไว้ศูนย์กลางที่ `src/config/index.js`
-- ใช้ `.env` เฉพาะ secret และ Discord IDs
-- มี Slash Commands พื้นฐาน
-- มีระบบสร้าง ticket เริ่มเควส
-- มี in-memory store สำหรับ run state
-- พร้อมต่อยอด clue system, abandon flow, admin flow
+## สิ่งที่เปลี่ยนแล้ว
+- เอาระบบทีมออก
+- 1 ผู้เล่น = 1 ticket ต่อ 1 สาย
+- ถ้า `completed` หรือ `abandoned` แล้ว เริ่มสายเดิมซ้ำไม่ได้
+- บันทึก quest run และ quest log ลง Neon
+- มี SQL script สำหรับสร้างตารางและ seed professions
 
-## โครงสร้าง
+## โครงสร้างฐานข้อมูล
+ใช้ไฟล์ในโฟลเดอร์ `sql/`
+- `001_init_neon.sql`
+- `002_seed_professions.sql`
 
-```txt
-src/
-  commands/
-  config/
-    index.js
-  events/
-  handlers/
-  services/
-  stores/
-  utils/
-  deploy-commands.js
-  index.js
+## ตารางหลัก
+- `professions`
+- `clues`
+- `quest_runs`
+- `quest_logs`
+
+## การตั้งค่า `.env`
+คัดลอก `.env.example` เป็น `.env`
+
+```env
+DISCORD_TOKEN=
+CLIENT_ID=
+GUILD_ID=
+DATABASE_URL=
+TICKET_CATEGORY_ID=
+LOG_CHANNEL_ID=
+ADMIN_ROLE_ID=
+STAFF_ROLE_ID=
 ```
 
-## วิธีใช้งาน
+## ขั้นตอนใช้งานกับ Neon
+1. สร้างโปรเจกต์ใน Neon
+2. คัดลอก connection string มาใส่ `DATABASE_URL`
+3. เปิด SQL Editor ใน Neon Console
+4. รัน `sql/001_init_neon.sql`
+5. รัน `sql/002_seed_professions.sql`
+6. ถ้าจะใช้ clue จริง ให้ insert ลงตาราง `clues`
 
-1. คัดลอก `.env.example` เป็น `.env`
-2. ใส่ค่าให้ครบ
-3. ติดตั้งแพ็กเกจ
-4. deploy slash commands
-5. start bot
-
+## รันโปรเจกต์
 ```bash
 npm install
 npm run deploy
 npm start
 ```
 
-## Variables อยู่ที่ไหน
-
-- Secret / ID จริง: `.env`
-- Config ทั้งระบบ: `src/config/index.js`
-
-## Commands ปัจจุบัน
+## คำสั่งบอท
 - `/ping`
 - `/professions`
 - `/start-hunt`
 
 ## หมายเหตุ
-ตอนนี้ store เป็นแบบ in-memory ถ้าบอท restart ข้อมูล run จะหาย
+- ใน `src/config/index.js` ยังมี `roleId` placeholder ให้เปลี่ยนเป็น ID จริงเอง
+- ถ้าจะเอา clue จริงต่อ ให้เชื่อมจากตาราง `clues` ได้เลย
